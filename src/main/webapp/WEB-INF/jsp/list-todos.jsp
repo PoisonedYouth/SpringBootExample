@@ -3,7 +3,6 @@
 
 <div class="container">
 	<table class="table table-striped">
-		<caption>Your todos are</caption>
 		<thead>
 		<tr>
 			<th>Description</th>
