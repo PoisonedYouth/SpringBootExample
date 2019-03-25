@@ -3,18 +3,22 @@ package com.poisonedyouth.SpringBootSample.controller;
 import com.poisonedyouth.SpringBootSample.model.Todo;
 import com.poisonedyouth.SpringBootSample.service.TodoService;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
-@SessionAttributes("name")
 public class TodoController {
 
 	private TodoService todoService;
@@ -32,7 +36,8 @@ public class TodoController {
 
 	@GetMapping(value = "/list-todos")
 	public String showTodos(ModelMap model) {
-		String name = (String) model.get("name");
+		String name = getLoggedInUserName();
+		model.put("name", name);
 		model.put("todos", todoService.retrieveTodos(name));
 		return "list-todos";
 	}
@@ -48,7 +53,8 @@ public class TodoController {
 		if (result.hasErrors()) {
 			return "todo";
 		}
-		String name = (String) model.get("name");
+		String name = getLoggedInUserName();
+		model.put("name", name);
 		todoService.addTodo(name, todo.getDesc(), todo.getTargetDate(), false);
 		return "redirect:/list-todos";
 	}
@@ -71,9 +77,18 @@ public class TodoController {
 		if (result.hasErrors()) {
 			return "todo";
 		}
-		String name = (String) model.get("name");
+		String name = getLoggedInUserName();
+		model.put("name", name);
 		todo.setUser(name);
 		todoService.updateTodo(todo);
 		return "redirect:/list-todos";
+	}
+
+	private String getLoggedInUserName() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			return ((UserDetails) principal).getUsername();
+		}
+		return principal.toString();
 	}
 }

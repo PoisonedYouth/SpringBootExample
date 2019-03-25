@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-sm bg-light navbar-light">
 	<a href="https://github.com/PoisonedYouth" class="navbar-brand">PoisonedYouth</a>
 	<ul class="navbar-nav mr-auto">
-		<li class="nav-item ${pageContext.request.requestURI eq '/WEB-INF/jsp/welcome.jsp' ? ' active' : ''}"><a class="nav-link" href="/login">Home</a></li>
+		<li class="nav-item ${pageContext.request.requestURI eq '/WEB-INF/jsp/welcome.jsp' ? ' active' : ''}"><a class="nav-link" href="/">Home</a></li>
 		<li class="nav-item ${pageContext.request.requestURI eq '/WEB-INF/jsp/list-todos.jsp' ? ' active' : ''}"><a class="nav-link" href="/list-todos">Todos</a></li>
 	</ul>
 	<ul class="nav navbar-nav">
